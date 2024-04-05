@@ -28,57 +28,49 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
-    return MaterialApp(
-      home: BlocProvider(
-          create: (context) => RestaurantBloc(restaurantRepository: RestaurantRepository()),
-          child:  Material(
-            child: Scaffold(
-              appBar: AppBar(
-                title: Text("Api-Get"),
-                centerTitle: true,
-                actions: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.refresh),
-                    onPressed: () {
-                      _restaurantBloc.add(FetchRestaurantEvent());
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.info),
-                    onPressed: () {
-                      navigateToAboutPage(context);
-                    },
-                  )
-                ],
-              ),
-              body: Container(
-                child: BlocListener<RestaurantBloc, RestaurantState>(
-                  listener: (context, state) {
-                    if (state is RestaurantFailState) {
-                      // Scaffold.of(context).showSnackBar(
-                      //   SnackBar(
-                      //     content: Text(state.message),
-                      //   ),
-                      // );
-                    }
-                  },
-                  child: BlocBuilder<RestaurantBloc, RestaurantState>(
-                    builder: (context, state) {
-                      if (state is RestaurantLoadingState) {
-                        return _buildLoading();
-                      } else if (state is RestaurantSuccessState) {
-                        return buildArticleList(state.restaurantModel);
-                      } else if (state is RestaurantFailState) {
-                        return _buildErrorUi(state.message);
-                      }
-                      return Container();
-                    },
-                  ),
-                ),
-              ),
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Api-Get"),
+        centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: () {
+              _restaurantBloc.add(FetchRestaurantEvent());
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.info),
+            onPressed: () {
+              navigateToAboutPage(context);
+            },
           )
-
+        ],
+      ),
+      body: Container(
+        child: BlocListener<RestaurantBloc, RestaurantState>(
+          listener: (context, state) {
+            if (state is RestaurantFailState) {
+              // Scaffold.of(context).showSnackBar(
+              //   SnackBar(
+              //     content: Text(state.message),
+              //   ),
+              // );
+            }
+          },
+          child: BlocBuilder<RestaurantBloc, RestaurantState>(
+            builder: (context, state) {
+              if (state is RestaurantLoadingState) {
+                return _buildLoading();
+              } else if (state is RestaurantSuccessState) {
+                return buildArticleList(state.restaurantModel);
+              } else if (state is RestaurantFailState) {
+                return _buildErrorUi(state.message);
+              }
+              return Container();
+            },
+          ),
+        ),
       ),
     );
   }

@@ -1,7 +1,9 @@
 import 'package:bloc_api_call_practice/bloc/login_bloc.dart';
 import 'package:bloc_api_call_practice/bloc/login_event.dart';
 import 'package:bloc_api_call_practice/bloc/login_state.dart';
+import 'package:bloc_api_call_practice/bloc/restaurant_bloc.dart';
 import 'package:bloc_api_call_practice/data/repository/login_repository.dart';
+import 'package:bloc_api_call_practice/data/repository/restaurant_repository.dart';
 import 'package:bloc_api_call_practice/ui/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +25,9 @@ class LoginScreen extends StatelessWidget {
             if (state is LoginSuccessState) {
               // Navigate to another screen upon successful login
 
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> BlocProvider(
+                  create: (context) => RestaurantBloc(restaurantRepository: RestaurantRepository()),
+                  child: HomePage())));
 
             } else if (state is LoginFailState) {
               ScaffoldMessenger.of(context).showSnackBar(
